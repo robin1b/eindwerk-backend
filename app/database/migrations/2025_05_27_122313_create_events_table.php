@@ -13,9 +13,29 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('organizer_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->dateTime('deadline');
+            $table->enum('privacy', ['public', 'private'])
+                ->default('public');
+            $table->boolean('password_protected')->default(false);
+            $table->string('password_hash')->nullable();
+            $table->boolean('anonymous_contributions')->default(false);
+            $table->boolean('show_contribution_breakdown')->default(true);
+            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamp('updated_at')
+                ->nullable()
+                ->useCurrent()
+                ->useCurrentOnUpdate();
+
+            $table->index('organizer_id', 'events_organizer_idx');
+            $table->index('deadline',     'events_deadline_idx');
         });
     }
+
 
     /**
      * Reverse the migrations.

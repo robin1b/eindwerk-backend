@@ -13,10 +13,20 @@ return new class extends Migration
     {
         Schema::create('contributions', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('event_id')
+                ->constrained('events')
+                ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+            $table->decimal('amount', 10, 2);
+            $table->boolean('anonymous')->default(false);
+            $table->timestamp('created_at')->nullable()->useCurrent();
+
+            $table->index('event_id', 'contrib_event_idx');
+            $table->index('user_id',  'contrib_user_idx');
         });
     }
-
     /**
      * Reverse the migrations.
      */

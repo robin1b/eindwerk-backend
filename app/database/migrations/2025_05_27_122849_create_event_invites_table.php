@@ -13,10 +13,17 @@ return new class extends Migration
     {
         Schema::create('event_invites', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('event_id')
+                ->constrained('events')
+                ->cascadeOnDelete();
+            $table->string('email');
+            $table->string('code', 100)->unique('invites_code_unique');
+            $table->dateTime('expires_at')->nullable();
+            $table->timestamp('created_at')->nullable()->useCurrent();
+
+            $table->index('event_id', 'invites_event_idx');
         });
     }
-
     /**
      * Reverse the migrations.
      */

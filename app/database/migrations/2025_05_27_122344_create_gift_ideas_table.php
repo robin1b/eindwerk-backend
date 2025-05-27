@@ -13,9 +13,26 @@ return new class extends Migration
     {
         Schema::create('gift_ideas', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('event_id')
+                ->constrained('events')
+                ->cascadeOnDelete();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('image_url')->nullable();
+            $table->foreignId('created_by_user_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamp('updated_at')
+                ->nullable()
+                ->useCurrent()
+                ->useCurrentOnUpdate();
+
+            $table->index('event_id', 'gift_ideas_event_idx');
         });
     }
+
 
     /**
      * Reverse the migrations.

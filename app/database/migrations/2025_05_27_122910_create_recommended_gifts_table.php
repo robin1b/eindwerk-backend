@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('recommended_gifts', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('gift_idea_id')
+                ->constrained('gift_ideas')
+                ->cascadeOnDelete();
+            $table->string('affiliate_url');
+            $table->timestamp('created_at')->nullable()->useCurrent();
+
+            $table->unique('gift_idea_id', 'recgift_giftidea_unique');
         });
     }
 

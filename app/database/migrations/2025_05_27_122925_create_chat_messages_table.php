@@ -13,7 +13,21 @@ return new class extends Migration
     {
         Schema::create('chat_messages', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('event_id')
+                ->constrained('events')
+                ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+            $table->text('message');
+            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamp('updated_at')
+                ->nullable()
+                ->useCurrent()
+                ->useCurrentOnUpdate();
+
+            $table->index('event_id', 'chat_event_idx');
+            $table->index('user_id',  'chat_user_idx');
         });
     }
 
