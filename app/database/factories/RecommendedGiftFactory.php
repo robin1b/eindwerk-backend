@@ -2,22 +2,19 @@
 
 namespace Database\Factories;
 
+use App\Models\RecommendedGift;
+use App\Models\GiftIdea;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Models\RecommendedGift>
- */
 class RecommendedGiftFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = RecommendedGift::class;
+
     public function definition(): array
     {
         return [
-            //
+            'gift_idea_id' => GiftIdea::factory(),
+            'affiliate_url' => $this->faker->url(),
         ];
     }
 }

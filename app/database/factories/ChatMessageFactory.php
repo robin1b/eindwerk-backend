@@ -2,22 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Models\ChatMessage;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Models\ChatMessage>
- */
 class ChatMessageFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = ChatMessage::class;
+
     public function definition(): array
     {
         return [
-            //
+            'event_id' => Event::factory(),
+            'user_id'  => User::factory(),
+            'message'  => $this->faker->sentences(2, true),
         ];
     }
 }

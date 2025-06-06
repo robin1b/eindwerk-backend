@@ -2,22 +2,23 @@
 
 namespace Database\Factories;
 
+use App\Models\EventInvite;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Models\EventInvite>
- */
 class EventInviteFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = EventInvite::class;
+
     public function definition(): array
     {
         return [
-            //
+            'event_id'  => Event::factory(),
+            'email'     => $this->faker->unique()->safeEmail(),
+            'code'      => Str::random(40),
+            'expires_at' => Carbon::now()->addDays(rand(1, 7)),
         ];
     }
 }
