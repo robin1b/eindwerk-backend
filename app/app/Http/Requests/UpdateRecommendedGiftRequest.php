@@ -7,22 +7,21 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateRecommendedGiftRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Alleen ingelogde gebruikers (bv. admins) mogen aanbevolen cadeaus bijwerken.
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() !== null;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Valideer dat:
+     * - “affiliate_url” indien aanwezig geldig is als URL en max. 255 tekens.
      */
     public function rules(): array
     {
         return [
-            //
+            'affiliate_url' => 'sometimes|required|url|max:255',
         ];
     }
 }

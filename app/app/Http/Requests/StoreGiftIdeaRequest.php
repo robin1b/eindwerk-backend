@@ -7,22 +7,25 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreGiftIdeaRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Alleen ingelogde gebruikers mogen cadeausuggesties toevoegen.
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() !== null;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Valideer dat:
+     * - “title” verplicht is, een string en max. 255 tekens.
+     * - “description” optioneel is en een string.
+     * - “image_url” optioneel is en een geldige URL.
      */
     public function rules(): array
     {
         return [
-            //
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image_url'   => 'nullable|url',
         ];
     }
 }

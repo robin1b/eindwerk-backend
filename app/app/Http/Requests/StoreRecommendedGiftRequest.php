@@ -7,22 +7,25 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreRecommendedGiftRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Bepaal of de aanroepende gebruiker de request mag doen.
+     * In dit geval willen we dat enkel ingelogde gebruikers (bv. admins)
+     * aanbevolen cadeaus kunnen aanmaken.
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() !== null;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Definieer hier de validatieregels voor het aanmaken van een RecommendedGift:
+     * - gift_idea_id moet verplicht aanwezig zijn én bestaan in de gift_ideas-tabel.
+     * - affiliate_url moet verplicht een geldige URL zijn.
      */
     public function rules(): array
     {
         return [
-            //
+            'gift_idea_id' => 'required|exists:gift_ideas,id',
+            'affiliate_url' => 'required|url|max:255',
         ];
     }
 }

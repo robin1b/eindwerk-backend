@@ -7,22 +7,21 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreChatMessageRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Alleen ingelogde gebruikers mogen chatberichten versturen.
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() !== null;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Valideer dat:
+     * - “message” verplicht is, een string en max. 1000 tekens lang.
      */
     public function rules(): array
     {
         return [
-            //
+            'message' => 'required|string|max:1000',
         ];
     }
 }

@@ -7,22 +7,21 @@ use Illuminate\Foundation\Http\FormRequest;
 class StoreEventInviteRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Alleen de ingelogde organisator (controller checkt later) mag invites aanmaken.
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user() !== null;
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Valideer dat:
+     * - “email” verplicht is, geldig e-mailformaat én max. 255 tekens.
      */
     public function rules(): array
     {
         return [
-            //
+            'email' => 'required|email|max:255',
         ];
     }
 }
