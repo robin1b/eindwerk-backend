@@ -3,47 +3,36 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreContributionRequest;
+use App\Models\Contribution;
+use App\Models\Event;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ContributionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * GET /api/events/{event}/contributions
+     * Iedereen mag de lijst bijdragen zien (optioneel: organizer alleen).
      */
-    public function index()
+    public function index(Request $request, Event $event): JsonResponse
     {
-        //
+        $contributions = $event->contributions()->with('user')->get();
+        return response()->json($contributions);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * POST /api/events/{event}/contributions
+     * Alleen ingelogde gebruikers mogen bijdragen.
+     * Validatie gebeurt via StoreContributionRequest.
      */
-    public function store(Request $request)
+    public function store(StoreContributionRequest $request, Event $event): JsonResponse
     {
-        //
-    }
+        $data = $request->validated(); // bevat 'amount' en 'anonymous'
+        $data['user_id'] = $request->user()->id;
+        $data['event_id'] = $event->id;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $contribution = Contribution::create($data);
+        return response()->json($contribution, 201);
     }
 }

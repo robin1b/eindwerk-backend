@@ -3,47 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRecommendedGiftRequest;
+use App\Http\Requests\UpdateRecommendedGiftRequest;
+use App\Models\RecommendedGift;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RecommendedGiftController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // POST /api/recommended-gifts
+    public function store(StoreRecommendedGiftRequest $request): JsonResponse
     {
-        //
+        // $request->validated() bevat ‘gift_idea_id’ en ‘affiliate_url’
+        $rec = RecommendedGift::create($request->validated());
+        return response()->json($rec, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // PUT/PATCH /api/recommended-gifts/{recommendedGift}
+    public function update(UpdateRecommendedGiftRequest $request, RecommendedGift $recommendedGift): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $recommendedGift->update($request->validated());
+        return response()->json($recommendedGift);
     }
 }
