@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('code', 100)->unique('invites_code_unique');
             $table->dateTime('expires_at')->nullable();
-            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamps();
 
             $table->index('event_id', 'invites_event_idx');
         });

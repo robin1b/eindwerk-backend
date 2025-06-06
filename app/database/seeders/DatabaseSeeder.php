@@ -58,14 +58,32 @@ class DatabaseSeeder extends Seeder
                     'user_id'  => $participants->random()->id,
                 ]);
 
-            // 4d) Voor elk event: maak 5 votes (random deelnemers en gift ideas)
-            Vote::factory()
-                ->count(5)
-                ->create([
-                    'event_id'     => $event->id,
-                    'user_id'      => $participants->random()->id,
-                    'gift_idea_id' => $ideas->random()->id,
-                ]);
+            // 4d) Nóg  unieke votes per event
+            //    – haal alle user‐ en giftIdea‐IDs op
+            $userIds = $participants->pluck('id')->toArray();
+            $ideaIds = $ideas->pluck('id')->toArray();
+
+            //    – maak een lijst van alle mogelijke (user, giftIdea) combinaties
+            $combinations = [];
+            foreach ($userIds as $uid) {
+                foreach ($ideaIds as $gid) {
+                    $combinations[] = [
+                        'event_id'     => $event->id,
+                        'user_id'      => $uid,
+                        'gift_idea_id' => $gid,
+                    ];
+                }
+            }
+
+            //    – schud de array en neem de eerste 5 unieke combinaties
+            shuffle($combinations);
+            $selected = array_slice($combinations, 0, 5);
+
+            //    – maak bij elke combinatie één vote
+            foreach ($selected as $data) {
+                Vote::factory()->create($data);
+            }
+
 
             // 4e) Voor elk event: maak 2 invites
             EventInvite::factory()
