@@ -17,7 +17,9 @@ return new class extends Migration
                 ->constrained('gift_ideas')
                 ->cascadeOnDelete();
             $table->string('affiliate_url');
-            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamps();
+
+
 
             $table->unique('gift_idea_id', 'recgift_giftidea_unique');
         });

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('gift_idea_id')
                 ->constrained('gift_ideas')
                 ->cascadeOnDelete();
-            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamps();
 
             $table->unique(['event_id', 'user_id', 'gift_idea_id'], 'votes_unique_per_user');
             $table->index('event_id',       'votes_event_idx');

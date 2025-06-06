@@ -20,11 +20,8 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
             $table->text('message');
-            $table->timestamp('created_at')->nullable()->useCurrent();
-            $table->timestamp('updated_at')
-                ->nullable()
-                ->useCurrent()
-                ->useCurrentOnUpdate();
+            $table->timestamps();
+
 
             $table->index('event_id', 'chat_event_idx');
             $table->index('user_id',  'chat_user_idx');

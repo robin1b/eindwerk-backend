@@ -21,7 +21,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->decimal('amount', 10, 2);
             $table->boolean('anonymous')->default(false);
-            $table->timestamp('created_at')->nullable()->useCurrent();
+            $table->timestamps();
 
             $table->index('event_id', 'contrib_event_idx');
             $table->index('user_id',  'contrib_user_idx');
